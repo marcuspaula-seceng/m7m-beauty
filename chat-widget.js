@@ -52,7 +52,7 @@
     var box=el('<div class="lschat-box" role="dialog" aria-label="Chat"><div class="lschat-head"><div class="av">💛</div><div><h4>'+CFG.NOME+'</h4><p>Online • responde rápido</p></div><button class="x" aria-label="Fechar">×</button></div><div class="lschat-msgs" id="lschatMsgs"></div><div class="lschat-quick" id="lschatQuick"></div><a class="lschat-wa" target="_blank" href="https://wa.me/'+CFG.WHATSAPP+'?text='+encodeURIComponent('Olá! Vim pelo chat do site 💛')+'">💬 Falar no WhatsApp</a><form class="lschat-in" id="lschatForm"><input id="lschatInput" placeholder="Escreva sua mensagem..." autocomplete="off"><button type="submit" aria-label="Enviar">➤</button></form></div>');
     document.body.appendChild(btn);document.body.appendChild(box);
     var msgs=box.querySelector('#lschatMsgs'),quick=box.querySelector('#lschatQuick'),form=box.querySelector('#lschatForm'),input=box.querySelector('#lschatInput');
-    function add(text,who){var m=el('<div class="lschat-msg '+who+'"></div>');m.innerHTML=text;msgs.appendChild(m);msgs.scrollTop=msgs.scrollHeight;}
+    function add(text,who){var m=el('<div class="lschat-msg '+who+'"></div>');m.textContent=text;msgs.appendChild(m);msgs.scrollTop=msgs.scrollHeight;return m;}
     function localReply(t){t=t.toLowerCase();for(var i=0;i<FAQ.length;i++){for(var j=0;j<FAQ[i].k.length;j++){if(t.indexOf(FAQ[i].k[j])>=0)return FAQ[i].a;}}return "Boa pergunta! 💛 Pra te responder certinho, chama a gente no WhatsApp (é rapidinho) que o time M7M te ajuda pessoalmente 😊";}
     function botAnswer(t){
       if(CFG.N8N_WEBHOOK){
@@ -65,7 +65,7 @@
     QUICK.forEach(function(q){var b=el('<button></button>');b.textContent=q;b.onclick=function(){add(q,"me");botAnswer(q);};quick.appendChild(b);});
     form.onsubmit=function(e){e.preventDefault();var v=input.value.trim();if(!v)return;add(v,"me");input.value="";botAnswer(v);};
     var opened=false;
-    function toggle(){box.classList.toggle('open');if(box.classList.contains('open')&&!opened){opened=true;add("Oi! 💛 Sou o atendimento da <b>"+CFG.NOME+"</b>. Posso te ajudar com marcas, preços, frete e pagamento — ou te levar pro WhatsApp. Como posso ajudar?","bot");input.focus();}}
+    function toggle(){box.classList.toggle('open');if(box.classList.contains('open')&&!opened){opened=true;var welcome=add("Oi! 💛 Sou o atendimento da ","bot");var name=document.createElement("b");name.textContent=CFG.NOME;welcome.appendChild(name);welcome.appendChild(document.createTextNode(". Posso te ajudar com marcas, preços, frete e pagamento — ou te levar pro WhatsApp. Como posso ajudar?"));input.focus();}}
     btn.onclick=toggle;box.querySelector('.x').onclick=toggle;
   }
   if(document.readyState!=='loading')inject();else document.addEventListener('DOMContentLoaded',inject);
